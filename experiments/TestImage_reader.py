@@ -5,7 +5,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Load image and preprocess
-image_path = 'pictures/image text 10.jpg'
+image_path = 'experiments/Images/text_1.png'
 image = Image.open(image_path)
 
 # Preprocessing
