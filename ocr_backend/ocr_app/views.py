@@ -52,7 +52,25 @@ def extract_text(request):
 # word document generation endpoint
 @api_view(['POST'])
 def generate_document(request):
-  if request.method == 'POST':
-    if extracted_text:
-      document = Document()
-      document.add_heading('Extracted Text', level)
+    if request.method == 'POST':
+        # Extract the text from the request data
+        extracted_text = request.data.get('extracted_text')
+
+        if extracted_text:
+            # Create a new Word document
+            document = Document()
+            document.add_heading('OCR-to-Word Document', level=1)
+            document.add_paragraph(extracted_text)
+
+            # Save the document to a file or stream it as a response
+            document_file = 'generated_document.docx'
+            document.save(document_file)
+
+            # Respond with the document for download
+            response = FileResponse(open(document_file, 'rb'))
+            response['Content-Disposition'] = f'attachment; filename="{document_file}"'
+            return response
+        else:
+            return Response({'error': 'No extracted text provided.'}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({'error': 'Invalid request method.'}, status=status.HTTP_400_BAD_REQUEST)
